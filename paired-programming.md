@@ -21,7 +21,7 @@ The user output data will be categorized into three separate program-generated f
 
 - **does current code include a proper skeleton (pseudocode) for starting this project?**
 
-The [readme.md](./README.md) contains pseudocode to guide users through dependency installation and repo cloning. It also contains example pseudocode for calling on the program within the command line interface (CLI).
+The [README.md](./README.md) contains pseudocode to guide users through dependency installation and repo cloning. It also contains example pseudocode for calling on the program within the command line interface (CLI).
 
 The [__main__.py](./*__main__.py) contains functions that allow the program `photogramkit` to be called on in the CLI. From first glance it appears that the first function within this script generates three empty folders in which the user output data (photos) will later be stored. 
 
@@ -29,11 +29,9 @@ The [sort.py](./*sort.py) contains functions to sort the 'final' photos into the
 
 - **what can this code do so far?**
 
+I had trouble installing program in my terminal and instead recieved an error message saying that the setup.py script was unsuccessfully run. However, this could be because I have to install the correct package dependencies.  
 
-
-
-
-- given project discription, what are some *individual* functions that could be written to accomplish *parts* of this goal?
+- **given project discription, what are some *individual* functions that could be written to accomplish *parts* of this goal?**
 
  # Code Contribution/Ideas:
 
