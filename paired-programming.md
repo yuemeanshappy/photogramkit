@@ -1,3 +1,4 @@
+
 # Goal of the project:
 *Is it clear to you from the proposal how the goal can be accomplished using Python and specific packages?*
 
@@ -40,10 +41,4 @@ I wonder if there is a way to speed up the sorting process that occurs when user
 Another thing to consider is the file type currently supported by the script (.CR3). Given that users might not necessarily be using the same camera, adding support for raw file formats other than .CR3 (e.g., .NEF for Nikon or .ARW for Sony) might be useful. 
 
 In the `extract_time_for_photos_in_one_camera` function, it would be interesting to consider adding support for other EXIF metadata fields, such as location data (EXIF:GPSLatitude, EXIF:GPSLongitude), camera model, or lens used. This can provide users with more context for sorting or organizing their photos. 
-
-
-
-
-
-
 
