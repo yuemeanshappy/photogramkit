@@ -37,40 +37,19 @@ import shutil # to copy photos
 from exiftool import ExifTool # only need the ExifTool Class within the exiftool package
 
 
-def parse_command_line():
-    "parses args for the module function"
-
-    # init parser and add arguments
-    parser = argparse.ArgumentParser()
-
-    # add input folder
-    parser.add_argument(
-        "--input",
-        help="input folder of unorganized photos")
-
-    # add output folder
-    parser.add_argument(
-        "--output",
-        help="output folder of organized photos")
-
-    # parse args
-    args = parser.parse_args()
-
-    return args
-
-def extract_time_for_photos_in_one_camera(date_folder, camera):
+def extract_time_for_photos_in_one_camera(date_folder, camera, img_format):
     """
     extract creation times for all the photos in one *camera folder*.
     suppose your input folder has a structure like this:
     ./photos-sdcards (input_folder)
     ├── 070324 (date_folder)
-    │   ├── bottom (camera_folder)
-    │   ├── middle (camera_folder)
-    │   └── top (camera_folder)
+    │   ├── camera1 (camera_folder)
+    │   ├── camera2 (camera_folder)
+    │   └── camera3 (camera_folder)
     └── 070424 (date_folder)
-        ├── bottom (camera_folder)
-        ├── middle (camera_folder)
-        └── top (camera_folder)
+        ├── camera1 (camera_folder)
+        ├── camera2 (camera_folder)
+        └── camera3 (camera_folder)
 
     Parameters:
         date_folder: a directory of date folder (like the 070324 and 070424 folders above)
@@ -84,8 +63,8 @@ def extract_time_for_photos_in_one_camera(date_folder, camera):
     # Get camera folder
     camera_folder = os.path.join(date_folder, camera)
 
-    # Use glob to directly get only .CR3 files, sort photos
-    photo_dirs = sorted(glob.glob(os.path.join(camera_folder, "*.CR3")))
+    # Use glob to directly get only image files, sort photos
+    photo_dirs = sorted(glob.glob(os.path.join(camera_folder, f"*.{img_format}")))
 
     # Initialize a list of tuple (photo_name, timestamp)
     timestamps = []
@@ -101,11 +80,11 @@ def extract_time_for_photos_in_one_camera(date_folder, camera):
             #precise_timestamp = f"{dt_orig}.{subsec_time_origi}"
 
             # format the precise timestamp
-            #precise_formatted = datetime.strptime(precise_timestamp, '%Y:%m:%d %H:%M:%S.%f')
+            # precise_formatted = datetime.strptime(precise_timestamp, '%Y:%m:%d %H:%M:%S.%f')
             dt_format = datetime.strptime(dt_orig, '%Y:%m:%d %H:%M:%S')
 
             # add to the list
-            #timestamps.append((os.path.basename(photo_dir),precise_formatted))
+            # timestamps.append((os.path.basename(photo_dir),precise_formatted))
             timestamps.append((os.path.basename(photo_dir),dt_format))
 
     return timestamps
@@ -180,8 +159,6 @@ def sort_photos(groups, camera, date_folder, sorted_folder):
                 ├── colorprofiles_namelabels
                 ├── flower1
                 └── flower2
-
-
     """
     # get the number of groups from the last function
     num_groups = len(groups)
@@ -232,7 +209,7 @@ def sort_photos(groups, camera, date_folder, sorted_folder):
         group_idx += 1
 
 
-def check_bugs(sorted_folder):
+def check_bugs(sorted_folder, cameras):
 
     """
     check bugs. sometimes if the number of consecutive flower images is smaller than 6, the flower images will be
@@ -248,7 +225,12 @@ def check_bugs(sorted_folder):
     """
 
     # Create or open the bug.txt file to log missing folders
-    with open(os.path.join(os.path.dirname(sorted_folder),'bug.txt'), 'a') as bug_file:
+    bug_file_path = os.path.join(sorted_folder, 'bug.txt')
+
+    # Ensure the directory exists
+    os.makedirs(os.path.dirname(bug_file_path), exist_ok=True)
+
+    with open(bug_file_path, 'a') as bug_file:
 
         subfolders = os.listdir(sorted_folder)
 
@@ -258,9 +240,9 @@ def check_bugs(sorted_folder):
 
             # go to flower folder
             if subfolder.startswith("flower"):
-                # Check for the presence of the "top", "middle", and "bottom" cameras
+                # Check for the presence of the cameras
                 missing_cameras = []
-                required_cameras = ["top", "middle", "bottom"]
+                required_cameras = cameras
 
                 # Check each required camera
                 for camera in required_cameras:
@@ -272,6 +254,76 @@ def check_bugs(sorted_folder):
                         bug_file.write(f"{subfolder_dir} is missing: {', '.join(missing_cameras)} camera\n. Please go to species's corresponding colorprofile_namelabels to check.\n")
 
 
+def run_sort(input_dir, output_dir, img_format):
+    """
+    combine all the functions above: extract_time_for_photos_in_one_camera, group_photos_by_timestamp, sort_photos
+    """
+    # get dates
+    dates = [d for d in os.listdir(input_dir) if os.path.isdir(os.path.join(input_dir, d)) and not d.startswith('.')]
+
+     # iterate each date folders
+    for date in dates:
+        # get date folder directory
+        date_folder = os.path.join(input_dir, date)
+
+        # define output directory
+        sorted_folder = os.path.join(output_dir, date)
+
+        # get camera folders
+        cameras = [c for c in os.listdir(date_folder) if os.path.isdir(os.path.join(date_folder, c)) and not c.startswith('.')]
+
+        # iterate each camera in each date folder
+        for camera in cameras:
+
+            # get timestamps of all the photos in each camera
+            timestamps = extract_time_for_photos_in_one_camera(date_folder = date_folder, camera = camera, img_format=img_format)
+
+            # group photos
+            groups = group_photos_by_timestamp(timestamps, max_time_diff=timedelta(minutes=3))
+
+            # sort photos
+            sort_photos(groups, camera = camera, date_folder = date_folder,
+                        sorted_folder=sorted_folder)
+
+        # check bugs
+        check_bugs(sorted_folder, cameras)
+
+
+def parse_command_line():
+    "parses args for the module function"
+
+    # init parser and add arguments
+    parser = argparse.ArgumentParser()
+
+    # add input folder
+    parser.add_argument(
+        "-i",
+        "--input",
+        help="input folder of unorganized photos",
+        required = True)
+
+    # add output folder
+    parser.add_argument(
+        "-o",
+        "--output",
+        help="output folder of organized photos",
+        required = True)
+
+    # add image format
+    parser.add_argument(
+        "-f",
+        "--format",
+        help="image format, can be CR3, JEPG, PNG and TIFF. Default is CR3",
+        default = "CR3",
+        choices=["CR3", "JPEG", "PNG", "TIFF", "DNG"],  # restrict to valid options
+        required = False)
+
+    # parse args
+    args = parser.parse_args()
+
+    return args
+
+
 def main():
     "run main function on parsed args"
 
@@ -281,33 +333,8 @@ def main():
     # get dates
     dates = os.listdir(args.input)
 
-    # define cameras
-    cameras = ["bottom", "middle", "top"]
-
-    # iterate each date folders
-    for date in dates:
-        # get date folder directory
-        date_folder = os.path.join(args.input, date)
-
-        # define output directory
-        sorted_folder = os.path.join(args.output, date)
-
-        # iterate each camera in each date folder
-        for camera in cameras:
-
-            # get timestamps of all the photos in each camera
-            timestamps = extract_time_for_photos_in_one_camera(date_folder = date_folder, camera = camera)
-
-            # group photos
-            groups = group_photos_by_timestamp(timestamps, max_time_diff=timedelta(minutes=3))
-
-            # sort photos
-            sort_photos(groups, camera = camera, date_folder = date_folder,
-                        sorted_folder=sorted_folder)
-
-
-        # check bugs
-        check_bugs(sorted_folder)
+    # run sort
+    run_sort(args.input, args.output, args.format)
 
 
 if __name__ == "__main__":
