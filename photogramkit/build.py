@@ -48,7 +48,7 @@ def run_build(input_dir, output_dir, metashape_dir, metashape_script, img_format
                     photo_files.append(photo_dir)
 
             # create a temporary config file to store the input, output and project name
-            temp_config_dir = os.path.join(species_dir, "temp_config.json")
+            temp_config_dir = os.path.join("./", "temp_config.json")
             config_data = {
                 "photo_files": photo_files,
                 "project_name": project_name
@@ -57,7 +57,7 @@ def run_build(input_dir, output_dir, metashape_dir, metashape_script, img_format
                 json.dump(config_data, f)
 
             # Change working directory to the project folder
-            os.chdir(species_dir)
+            # os.chdir(species_dir)
 
             # run metashape 
             # use -r option to specify the script
@@ -104,7 +104,7 @@ def parse_command_line():
         "--format",
         help="image format, can be CR3, JEPG, PNG and TIFF. Default is CR3",
         default = "tif",
-        choices=["CR3", "JPEG", "PNG", "TIFF"],  # restrict to valid options
+        choices=["CR3", "JPEG", "PNG", "tif"],  # restrict to valid options
         required = False)
 
 

@@ -56,9 +56,9 @@ def parse_command_line():
     build_parser.add_argument(
         "-f",
         "--format",
-        help="image format, can be CR3, JEPG, PNG and TIFF. Default is CR3",
+        help="image format, can be CR3, JEPG, PNG and TIFF. Default is TIFF",
         default = "tif",
-        choices=["CR3", "JPEG", "PNG", "TIFF"],  # restrict to valid options
+        choices=["CR3", "JPEG", "PNG", "tif"],  # restrict to valid options
         required = False)
 
     # 'relax' subcommand
@@ -90,7 +90,7 @@ def main():
     if args.command == "sort":
         sort.run_sort(args.input, args.output, args.format)
     elif args.command == "color":
-        color.run_color(args.input, args.output, args.format)
+        color.run_color(args.input, args.output, args.darktable, args.format)
     elif args.command == "build":
         build.run_build(args.input, args.output, args.metashape, args.script, args.format)
     elif args.command == "relax":

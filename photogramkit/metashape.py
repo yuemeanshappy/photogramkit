@@ -15,7 +15,7 @@ def main():
         config = json.load(f)
 
     # Load project-specific config
-    project_config_path = os.path.join(os.getcwd(), "temp_config.json")
+    project_config_path = os.path.join("./", "temp_config.json")
     with open(project_config_path, 'r') as f:
         project_config = json.load(f)
 
