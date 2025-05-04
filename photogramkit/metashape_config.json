@@ -1,0 +1,41 @@
+{
+  "background_mask": "2024background.tif", 
+  "masking": {
+    "method": "MaskingModeBackground",
+    "operation": "MaskOperationReplacement",
+    "tolerance": 10
+  },
+  "marker_detection": {
+    "target_type": "CircularTarget12bit"
+  },
+  "photo_alignment": {
+    "accuracy_downscale": 1,
+    "generic_preselection": true,
+    "reference_preselection": false,
+    "filter_stationary_points": true,
+    "keypoint_limit": 40000,
+    "tiepoint_limit": 10000,
+    "guided_matching": true,
+    "filter_mask": true,
+    "adaptive_camera_fitting": true
+  },
+  "gradual_selection": {
+    "reconstruction_uncertainty_threshold": 10,
+    "reprojection_error_threshold": 0.3
+  },
+  "depth_maps": {
+    "downscale": 2,
+    "filter_mode": "ModerateFiltering"
+  },
+  "mesh_building": {
+    "source_data": "DepthMapsData",
+    "surface_type": "Arbitrary",
+    "face_count": "HighFaceCount",
+    "vertex_colors": true
+  },
+  "texture_building": {
+    "mapping_mode": "GenericMapping",
+    "blending_mode": "MosaicBlending",
+    "texture_size": 4096
+  }
+}
