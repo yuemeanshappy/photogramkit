@@ -6,16 +6,16 @@ It automates:
 2. **Photo color calibration**: applies color correction in batch using `darktable-cli` command-line tool.
 3. **3D model building**: automates model construction with minial human input using `Agisoft Metashape Pro`.
 
-### Inputs
+#### Inputs
 - **Unsorted photos** from SD cards (supports `.CR3`, `.DNG`, `.JEPG`, `.PNG`, `.TIFF`)
 - **Color profile file** in `.dcp` format
 
-### Outputs
+#### Outputs
 - **Sorted, color-calibrated photos**
 - **3D model projects** in `.psx` format
 - **3D mesh files** in `.obj` format or `.ply` format
 
-### Prerequisites
+## Prerequisites
 **Required software**
 - [Darktable](https://www.darktable.org/install/) (free, for color calibration)
 - [Agisoft Metashape Pro](https://www.agisoft.com/downloads/installer/) (commerical, educational license available($549) or 30-day free trial)
@@ -26,14 +26,14 @@ It automates:
 pip install pyexiftool==0.4.13
 ```
 
-### Installation
+## Installation
 ```bash
 git clone  https://github.com/yuemeanshappy/photogram.git
 cd ./photogramkit
 pip install -e .
 ```
 
-### Example usage
+## Example usage
 #### 0. check help manual
 ```bash
 # overall help manual
@@ -109,7 +109,7 @@ photogramkit relax -i <input_photo_dir> \
 --darktable <path_to_darktable-cli> \
 --img_format <photo_format> 
 ```
-**example**
+**Example**
 ```bash
 photogramkit relax -i ./example-data/photos-sdcards \
 -s ./example-data/relax/sort/ \
@@ -122,6 +122,11 @@ photogramkit relax -i ./example-data/photos-sdcards \
 
 ```
 
-### Reference
+## Next steps
+1. Generalize photo sorting to accommodate different file tree structures
+2. Run photo color calibration and model construction in parallel
+
+
+## Reference
 - [darktable-cli manual](https://docs.darktable.org/usermanual/4.0/en/special-topics/program-invocation/darktable-cli/)
 - [Agisoft Metashape manual](https://www.agisoft.com/pdf/metashape-pro_2_1_en.pdf)
