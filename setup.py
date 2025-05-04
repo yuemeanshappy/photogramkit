@@ -20,8 +20,8 @@ setup(
 		"console_scripts": [
 			"photogramkit = photogramkit.__main__:main"
 		]
-	}
+	},
 	install_requires=[
         'pyexiftool==0.4.13'
-    ],
+    ]
 	)
