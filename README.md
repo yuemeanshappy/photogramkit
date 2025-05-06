@@ -34,6 +34,10 @@ pip install -e .
 ```
 
 ## Example usage
+#### Example data
+You can download a demo of data from this [Google Drive Link](https://drive.google.com/drive/folders/1F_fQNevOBWYguRdzmkGYL3Wus54oOQWV?usp=drive_link).
+You can also walk through the code below using the [Jupyter Notebook demo](https://github.com/yuemeanshappy/photogramkit/blob/main/demo.ipynb).
+
 #### 0. check help manual
 ```bash
 # overall help manual
@@ -60,7 +64,9 @@ photogramkit sort -i <input_photo_dir> \
 ```
 **Example:**
 ```bash
-photogramkit sort -i ./example-data/photos-sdcards -o ./example-data/photos-organized
+photogramkit sort -i ./demo/photos-sdcards \
+-o ./demo/photos-organized \
+-f CR3
 ```
 **Before and after sorting**
 - [Before sorting](https://tree.nathanfriend.com/?s=(%27options!(%27fancyT~fullPath!false~trailingSlashT~rootDotT)~Y(%27Y%27J070424LKbottom*329V0V1V2V3V4V5V6V7V8w6w7w8w9W0W1W2W3W4k395HLKmiddle*341X2X3X4X5X6X7X8X9B50W7W8W9Q0Q1Q2Q3Q4Q5k406HLJtopj449N0N1N2N3N4N5N6N7N8q5q6q7q8q9x0x1x2x3HLEJO7514H%27)~version!%271%27)*FKO1-HjA%E2%94%80%E2%94%80%20BH*3EZZFL%E2%94%82%C2%A0%C2%A0%20H.CR3J%E2%94%94AK%E2%94%9CAL%5CnEN-45OIMG_QH*40T!trueU-5VB3WB9XB4Ysource!Z%20%20jLEKO7kHFJO1qU0wB8xU1%01xwqkjZYXWVUTQONLKJHFEBA-*)
@@ -76,8 +82,8 @@ photogramkit color -i <input_photo_dir> \
 ```
 **Example**
 ```bash
-photogramkit color -i ./example-data/photos-organized \
--o ./example-data/photos-color-calibrated \
+photogramkit color -i ./demo/photos-organized-final \
+-o ./demo/photos-color-calibrated \
 -d /Applications/darktable.app/Contents/MacOS/darktable-cli
 
 ```
@@ -92,8 +98,8 @@ photogramkit build -i <input_photo_dir> \
 ```
 **Example**
 ```bash
-photogramkit build -i ./example-data/photos-color-calibrated \
--o ./example-data/3d-models/ \
+photogramkit build -i ./demo/photos-color-calibrated \
+-o ./demo/3d-models \
 -m /Applications/MetashapePro.app/Contents/MacOS/MetashapePro \
 -s ./photogramkit/metashape.py
 ```
@@ -111,10 +117,10 @@ photogramkit relax -i <input_photo_dir> \
 ```
 **Example**
 ```bash
-photogramkit relax -i ./example-data/photos-sdcards \
--s ./example-data/relax/sort/ \
--c ./example-data/relax/color-calibrated/ \
--m ./example-data/relax/models \
+photogramkit relax -i ./demo/photos-sdcards \
+-s ./demo/relax/photos-organized \
+-c ./demo/relax/photos-color-calibrated \
+-m ./demo/relax/3d-models \
 --metashape /Applications/MetashapePro.app/Contents/MacOS/MetashapePro \
 --script ./photogramkit/metashape.py \
 --darktable /Applications/darktable.app/Contents/MacOS/darktable-cli \
