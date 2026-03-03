@@ -28,7 +28,7 @@ pip install pyexiftool==0.4.13
 
 ## Installation
 ```bash
-git clone  https://github.com/yuemeanshappy/photogram.git
+git clone  https://github.com/yuemeanshappy/photogramkit.git
 cd ./photogramkit
 pip install -e .
 ```
